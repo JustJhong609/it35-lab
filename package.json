@@ -1,9 +1,13 @@
 {
+  
   "name": "it35-lab",
   "private": true,
   "version": "0.0.1",
   "type": "module",
+  "homepage": "https://github.com/JustJhong609/it35-lab.git",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
