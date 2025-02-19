@@ -4,7 +4,7 @@
   "private": true,
   "version": "0.0.1",
   "type": "module",
-  "homepage": "https://github.com/JustJhong609/it35-lab.git",
+  "homepage": "https://JustJhong609.github.io/it35-lab.git",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
