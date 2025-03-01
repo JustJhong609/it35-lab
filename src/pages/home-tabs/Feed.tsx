@@ -1,16 +1,36 @@
-import React from 'react';
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
-
-function Example() {
+import { 
+  IonButtons,
+    IonContent, 
+    IonHeader, 
+    IonMenuButton, 
+    IonPage, 
+    IonTitle, 
+    IonToolbar 
+} from '@ionic/react';
+const Feed: React.FC = () => {
   return (
-    <IonCard>
-      <IonCardHeader>
-        <IonCardTitle>Card Title</IonCardTitle>
-        <IonCardSubtitle>Card Subtitle</IonCardSubtitle>
-      </IonCardHeader>
-
-      <IonCardContent>Here's a small text description for the card content. Nothing more, nothing less.</IonCardContent>
-    </IonCard>
+    <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonButtons slot='start'>
+            <IonMenuButton></IonMenuButton>
+          </IonButtons>
+          <IonTitle>Feed</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent fullscreen>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100%',
+        }}
+      >Feed
+      </div>
+      </IonContent>
+    </IonPage>
   );
-}
-export default Example;
+};
+
+export default Feed;
