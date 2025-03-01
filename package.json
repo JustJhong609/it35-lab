@@ -1,208 +1,368 @@
 {
   
 
-  "name": "it35-lab",
+
+
+"name": "it35-lab",
   
 
-  "private": true,
+
+
+"private": true,
   
 
-  "version": "0.0.1",
+
+
+"version": "0.0.1",
   
 
-  "type": "module",
+
+
+"type": "module",
   
 
-  "homepage": "https://JustJhong609.github.io/{repository-name}/",
+
+
+"homepage": "https://justjhong609.github.io/it35-lab/",
   
 
-  "scripts": {
+
+
+"scripts": {
   
 
-    
 
-  "predeploy": "npm run build",
+
   
 
-    
 
-  "deploy": "gh-pages -d dist",
+
+"predeploy": "npm run build",
   
 
-    
 
-  "dev": "vite",
+
   
 
-    
 
-  "build": "tsc && vite build",
+
+"deploy": "gh-pages -d dist",
   
 
-    
 
-  "preview": "vite preview",
+
   
 
-    
 
-  "test.e2e": "cypress run",
+
+"dev": "vite",
   
 
-    
 
-  "test.unit": "vitest",
+
   
 
-    
 
-  "lint": "eslint"
+
+"build": "tsc && vite build",
   
 
-  },
+
+
   
 
-  "dependencies": {
+
+
+"preview": "vite preview",
   
 
-    
 
-  "@ionic/react": "^8.0.0",
+
   
 
-    
 
-  "@ionic/react-router": "^8.0.0",
+
+"test.e2e": "cypress run",
   
 
-    
 
-  "@types/react-router": "^5.1.20",
+
   
 
-    
 
-  "@types/react-router-dom": "^5.3.3",
+
+"test.unit": "vitest",
   
 
-    
 
-  "ionicons": "^7.0.0",
+
   
 
-    
 
-  "react": "^18.2.0",
+
+"lint": "eslint"
   
 
-    
 
-  "react-dom": "^18.2.0",
+
+},
   
 
-    
 
-  "react-router": "^5.3.4",
+
+"dependencies": {
   
 
-    
 
-  "react-router-dom": "^5.3.4"
+
   
 
-  },
+
+
+"@ionic/react": "^8.0.0",
   
 
-  "devDependencies": {
+
+
   
 
-    
 
-  "@testing-library/dom": ">=7.21.4",
+
+"@ionic/react-router": "^8.0.0",
   
 
-    
 
-  "@testing-library/jest-dom": "^5.16.5",
+
   
 
-    
 
-  "@testing-library/react": "^14.0.0",
+
+"@types/react-router": "^5.1.20",
   
 
-    
 
-  "@testing-library/user-event": "^14.4.3",
+
   
 
-    
 
-  "@types/react": "^18.0.27",
+
+"@types/react-router-dom": "^5.3.3",
   
 
-    
 
-  "@types/react-dom": "^18.0.10",
+
   
 
-    
 
-  "@vitejs/plugin-legacy": "^5.0.0",
+
+"ionicons": "^7.0.0",
   
 
-    
 
-  "@vitejs/plugin-react": "^4.0.1",
+
   
 
-    
 
-  "cypress": "^13.5.0",
+
+"react": "^18.2.0",
   
 
-    
 
-  "eslint": "^8.35.0",
+
   
 
-    
 
-  "eslint-plugin-react": "^7.32.2",
+
+"react-dom": "^18.2.0",
   
 
-    
 
-  "gh-pages": "^6.3.0",
+
   
 
-    
 
-  "jsdom": "^22.1.0",
+
+"react-router": "^5.3.4",
   
 
-    
 
-  "terser": "^5.4.0",
+
   
 
-    
 
-  "typescript": "^5.1.6",
+
+"react-router-dom": "^5.3.4"
   
 
-    
 
-  "vite": "5.2.14",
+
+},
   
 
-    
 
-  "vitest": "^0.34.6"
+
+"devDependencies": {
   
 
-  },
+
+
   
 
-  "description": "An Ionic project"
+
+
+"@testing-library/dom": ">=7.21.4",
+  
+
+
+
+  
+
+
+
+"@testing-library/jest-dom": "^5.16.5",
+  
+
+
+
+  
+
+
+
+"@testing-library/react": "^14.0.0",
+  
+
+
+
+  
+
+
+
+"@testing-library/user-event": "^14.4.3",
+  
+
+
+
+  
+
+
+
+"@types/react": "^18.0.27",
+  
+
+
+
+  
+
+
+
+"@types/react-dom": "^18.0.10",
+  
+
+
+
+  
+
+
+
+"@vitejs/plugin-legacy": "^5.0.0",
+  
+
+
+
+  
+
+
+
+"@vitejs/plugin-react": "^4.0.1",
+  
+
+
+
+  
+
+
+
+"cypress": "^13.5.0",
+  
+
+
+
+  
+
+
+
+"eslint": "^8.35.0",
+  
+
+
+
+  
+
+
+
+"eslint-plugin-react": "^7.32.2",
+  
+
+
+
+  
+
+
+
+"gh-pages": "^6.3.0",
+  
+
+
+
+  
+
+
+
+"jsdom": "^22.1.0",
+  
+
+
+
+  
+
+
+
+"terser": "^5.4.0",
+  
+
+
+
+  
+
+
+
+"typescript": "^5.1.6",
+  
+
+
+
+  
+
+
+
+"vite": "5.2.14",
+  
+
+
+
+  
+
+
+
+"vitest": "^0.34.6"
+  
+
+
+
+},
+  
+
+
+
+"description": "An Ionic project"
 }
