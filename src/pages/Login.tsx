@@ -21,20 +21,20 @@ const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const doLogin = () => {
-    navigation.push('/it35b-lab/app', 'forward', 'replace');
+    navigation.push('/it35-lab/app', 'forward', 'replace');
   };
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Login</IonTitle>
+          <IonTitle> Login/SignUp ni Jhong</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding" fullscreen>
         <div className="login-container">
-          <h2>Welcome to Gaisano Carmen!</h2>
-          <p>Please login to continue</p>
+          <h2>Welcome to NBSC-ICS !</h2>
+          <p>Please lupad to continue</p>
 
           <IonItem className="input-field">
             <IonLabel position="stacked">Email</IonLabel>
@@ -69,7 +69,7 @@ const Login: React.FC = () => {
           </IonButton>
 
           <p className="register-link">
-            Don't have an account? <a href="it35b-lab/register">Sign up</a>
+            Way account? Hala Lupad <a href="it35-lab/register">Sign up</a>
           </p>
         </div>
       </IonContent>
