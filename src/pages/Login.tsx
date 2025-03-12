@@ -28,7 +28,7 @@ const Login: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle> Login/SignUp ni Jhong</IonTitle>
+          <IonTitle> Login/SignUp ni Jhong. Busy ko, ay kog kuana !</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding" fullscreen>
