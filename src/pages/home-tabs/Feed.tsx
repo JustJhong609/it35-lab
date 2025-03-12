@@ -18,7 +18,7 @@ const Feed: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonButtons slot='start'>
+          <IonButtons slot="start">
             <IonMenuButton></IonMenuButton>
           </IonButtons>
           <IonTitle>Feed</IonTitle>
@@ -31,7 +31,10 @@ const Feed: React.FC = () => {
             <IonCardSubtitle>Card Subtitle</IonCardSubtitle>
           </IonCardHeader>
 
-          <IonCardContent>Here's a small text description for the card content. Nothing more, nothing less.</IonCardContent>
+          <IonCardContent>
+            Here's a small text description for the card content. Nothing more,
+            nothing less.
+          </IonCardContent>
 
           <IonButton fill="clear">Action 1</IonButton>
           <IonButton fill="clear">Action 2</IonButton>
@@ -42,15 +45,30 @@ const Feed: React.FC = () => {
             <IonCardSubtitle>Card Subtitle</IonCardSubtitle>
           </IonCardHeader>
 
-          <IonCardContent>Here's a small text description for the card content. Nothing more, nothing less.</IonCardContent>
+          <IonCardContent>
+            Here's a small text description for the card content. Nothing more,
+            nothing less.
+          </IonCardContent>
+
+          <IonButton fill="clear">Action 1</IonButton>
+          <IonButton fill="clear">Action 2</IonButton>
+        </IonCard>
+        <IonCard>
+          <IonCardHeader>
+            <IonCardTitle>Jhong Title</IonCardTitle>
+            <IonCardSubtitle>Card Subtitle</IonCardSubtitle>
+          </IonCardHeader>
+
+          <IonCardContent>
+            Here's a small text description for the card content. Nothing more,
+            nothing less.
+          </IonCardContent>
 
           <IonButton fill="clear">Action 1</IonButton>
           <IonButton fill="clear">Action 2</IonButton>
         </IonCard>
         
       </IonContent>
-
-
     </IonPage>
   );
 };
