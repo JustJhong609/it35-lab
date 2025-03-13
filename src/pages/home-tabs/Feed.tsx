@@ -32,8 +32,7 @@ const Feed: React.FC = () => {
           </IonCardHeader>
 
           <IonCardContent>
-            Here's a small text description for the card content. Nothing more,
-            nothing less.
+            Ako nagud ni naunsa diay mo . 
           </IonCardContent>
 
           <IonButton fill="clear">Action 1</IonButton>
@@ -55,7 +54,7 @@ const Feed: React.FC = () => {
         </IonCard>
         <IonCard>
           <IonCardHeader>
-            <IonCardTitle>Jhong Title</IonCardTitle>
+            <IonCardTitle>Ayaw kol</IonCardTitle>
             <IonCardSubtitle>Card Subtitle</IonCardSubtitle>
           </IonCardHeader>
 
