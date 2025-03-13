@@ -9,19 +9,19 @@ import {
   IonTitle,
   IonToolbar,
   useIonRouter,
-  IonIcon
-} from '@ionic/react';
-import { eye, eyeOff } from 'ionicons/icons';
-import { useState } from 'react';
+  IonIcon,
+} from "@ionic/react";
+import { eye, eyeOff } from "ionicons/icons";
+import { useState } from "react";
 
 const Login: React.FC = () => {
   const navigation = useIonRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const doLogin = () => {
-    navigation.push('/it35-lab/app', 'forward', 'replace');
+    navigation.push("/it35-lab/app", "forward", "replace");
   };
 
   return (
@@ -49,7 +49,7 @@ const Login: React.FC = () => {
           <IonItem className="input-field">
             <IonLabel position="stacked">Password</IonLabel>
             <IonInput
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
               value={password}
               onIonInput={(e) => setPassword(e.detail.value!)}
@@ -67,9 +67,14 @@ const Login: React.FC = () => {
           <IonButton expand="full" className="login-btn" onClick={doLogin}>
             Login
           </IonButton>
-
           <p className="register-link">
-            Way account? Hala Lupad <a href="it35-lab/register">Sign up</a>
+            Way account? Hala Lupad{" "}
+            <span
+              style={{ color: "blue", cursor: "pointer", fontWeight: "bold" }}
+              onClick={() => navigation.push("/register", "forward")}
+            >
+              Sign up
+            </span>
           </p>
         </div>
       </IonContent>
