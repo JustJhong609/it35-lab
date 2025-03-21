@@ -13,10 +13,11 @@ import {
   IonRow,
   IonCol,
   IonText,
+  IonAlert,
 } from "@ionic/react";
 import { eye, eyeOff } from "ionicons/icons";
 import { useState } from "react";
-import { supabase } from "../supabaseClient";
+import {supabase} from "../supabaseClient";
 
 const Login: React.FC = () => {
   const navigation = useIonRouter();
@@ -24,22 +25,32 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
 
-  // Login Function
   const doLogin = async () => {
-    setError(""); // Clear previous errors
-
+    setError("");
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
-
-    console.log("Login Response:", data); // Debugging
-
     if (error) {
-      setError(error.message); // Display error if login fails
+      setError(error.message);
     } else {
-      navigation.push("/it35-lab/app", "forward", "replace"); // Navigate on success
+      navigation.push("/it35-lab/app", "forward", "replace");
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+      redirectTo: "http://localhost:5173/reset-password",
+    });
+    if (!error) {
+      setShowForgotPassword(false);
+      setShowSuccess(true);
+    } else {
+      setError(error.message);
     }
   };
 
@@ -47,7 +58,6 @@ const Login: React.FC = () => {
     <IonPage>
       <IonHeader></IonHeader>
       <IonContent className="ion-padding" fullscreen>
-        {/* Centered Layout */}
         <IonGrid className="ion-justify-content-center ion-align-items-center">
           <IonRow className="ion-justify-content-center ion-align-items-center">
             <IonCol size="6" className="ion-text-center">
@@ -65,7 +75,6 @@ const Login: React.FC = () => {
             </IonCol>
           </IonRow>
 
-          {/* Error Message */}
           {error && (
             <IonRow className="ion-justify-content-center">
               <IonCol size="12" className="ion-text-center">
@@ -74,7 +83,6 @@ const Login: React.FC = () => {
             </IonRow>
           )}
 
-          {/* Login Form */}
           <IonRow className="ion-justify-content-center">
             <IonCol size="12" sizeMd="8">
               <IonItem>
@@ -95,7 +103,11 @@ const Login: React.FC = () => {
                   value={password}
                   onIonInput={(e) => setPassword(e.detail.value!)}
                 />
-                <IonButton fill="clear" slot="end" onClick={() => setShowPassword(!showPassword)}>
+                <IonButton
+                  fill="clear"
+                  slot="end"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
                   <IonIcon icon={showPassword ? eyeOff : eye} />
                 </IonButton>
               </IonItem>
@@ -103,21 +115,66 @@ const Login: React.FC = () => {
               <IonButton expand="full" className="login-btn" onClick={doLogin}>
                 Login
               </IonButton>
+              
+              <IonButton 
+                fill="clear" 
+                expand="full" 
+                color="primary"
+                onClick={() => setShowForgotPassword(true)}
+              >
+                Forgot Password?
+              </IonButton>
 
               <IonRow className="ion-justify-content-center ion-padding-top">
-              <IonText>Way account? Hala Lupad </IonText>
-  <IonText
-    color="primary"
-    className="ion-text-bold"
-    onClick={() => navigation.push("/register", "forward")}
-    style={{ cursor: "pointer", marginLeft: "4px" }} // Ensures spacing
-  >
-    Sign up
-  </IonText>
+                <IonText>Way account? Hala Lupad </IonText>
+                <IonText
+                  color="primary"
+                  className="ion-text-bold"
+                  onClick={() => navigation.push("/register", "forward")}
+                  style={{ cursor: "pointer", marginLeft: "4px" }}
+                >
+                  Sign up
+                </IonText>
               </IonRow>
             </IonCol>
           </IonRow>
         </IonGrid>
+
+        {/* Forgot Password Alert */}
+        <IonAlert
+  isOpen={showForgotPassword}
+  onDidDismiss={() => setShowForgotPassword(false)}
+  header="Reset Password"
+  inputs={[
+    {
+      name: "email",
+      type: "email",
+      placeholder: "Enter your email",
+      attributes: {
+        onIonInput: (e: any) => setResetEmail(e.target.value),
+      },
+    },
+  ]}
+  buttons={[
+    {
+      text: "Cancel",
+      role: "cancel",
+    },
+    {
+      text: "Send",
+      handler: handleForgotPassword,
+    },
+  ]}
+/>
+
+        {/* Success Alert */}
+        <IonAlert
+          isOpen={showSuccess}
+          onDidDismiss={() => setShowSuccess(false)}
+          header="Success"
+          message="Password reset email sent. Check your inbox."
+          buttons={["OK"]}
+        />
       </IonContent>
     </IonPage>
   );
