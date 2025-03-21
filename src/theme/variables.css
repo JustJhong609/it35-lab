@@ -1,2 +1,10 @@
 /* For information on how to create your own theme, please see:
 http://ionicframework.com/docs/theming/ */
+.logo-container {
+    margin-bottom: 12px; /* Reduce space */
+  }
+  .logo {
+    width: 80px;
+    height: 80px;
+  }
+  

@@ -6,134 +6,119 @@ import {
   IonItem,
   IonLabel,
   IonPage,
-  IonTitle,
-  IonToolbar,
   useIonRouter,
   IonIcon,
+  IonImg,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonText,
 } from "@ionic/react";
 import { eye, eyeOff } from "ionicons/icons";
 import { useState } from "react";
+import { supabase } from "../supabaseClient";
 
 const Login: React.FC = () => {
   const navigation = useIonRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
 
-  const doLogin = () => {
-    navigation.push("/it35-lab/app", "forward", "replace");
+  // Login Function
+  const doLogin = async () => {
+    setError(""); // Clear previous errors
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    console.log("Login Response:", data); // Debugging
+
+    if (error) {
+      setError(error.message); // Display error if login fails
+    } else {
+      navigation.push("/it35-lab/app", "forward", "replace"); // Navigate on success
+    }
   };
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle> Login/SignUp ni Jhong. Busy ko, ay kog kuana !</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <IonHeader></IonHeader>
       <IonContent className="ion-padding" fullscreen>
-        <div className="login-container">
-          <h2>Welcome to NBSC-ICS !</h2>
-          <p>Please lupad to continue</p>
+        {/* Centered Layout */}
+        <IonGrid className="ion-justify-content-center ion-align-items-center">
+          <IonRow className="ion-justify-content-center ion-align-items-center">
+            <IonCol size="6" className="ion-text-center">
+              <IonImg src="/logo1.png" className="logo" />
+            </IonCol>
+            <IonCol size="6" className="ion-text-center">
+              <IonImg src="/logo2.png" className="logo" />
+            </IonCol>
+          </IonRow>
 
-          <IonItem className="input-field">
-            <IonLabel position="stacked">Email</IonLabel>
-            <IonInput
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onIonInput={(e) => setEmail(e.detail.value!)}
-            />
-          </IonItem>
+          <IonRow className="ion-justify-content-center">
+            <IonCol size="12" className="ion-text-center">
+              <h2>Welcome to NBSC-ICS!</h2>
+              <p>Please lupad to continue</p>
+            </IonCol>
+          </IonRow>
 
-          <IonItem className="input-field">
-            <IonLabel position="stacked">Password</IonLabel>
-            <IonInput
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
-              value={password}
-              onIonInput={(e) => setPassword(e.detail.value!)}
-            />
-            <IonButton
-              fill="clear"
-              slot="end"
-              onClick={() => setShowPassword(!showPassword)}
-              className="password-toggle"
-            >
-              <IonIcon icon={showPassword ? eyeOff : eye} />
-            </IonButton>
-          </IonItem>
+          {/* Error Message */}
+          {error && (
+            <IonRow className="ion-justify-content-center">
+              <IonCol size="12" className="ion-text-center">
+                <IonText color="danger">{error}</IonText>
+              </IonCol>
+            </IonRow>
+          )}
 
-          <IonButton expand="full" className="login-btn" onClick={doLogin}>
-            Login
-          </IonButton>
-          <p className="register-link">
-            Way account? Hala Lupad{" "}
-            <span
-              style={{ color: "blue", cursor: "pointer", fontWeight: "bold" }}
-              onClick={() => navigation.push("/register", "forward")}
-            >
-              Sign up
-            </span>
-          </p>
-        </div>
+          {/* Login Form */}
+          <IonRow className="ion-justify-content-center">
+            <IonCol size="12" sizeMd="8">
+              <IonItem>
+                <IonLabel position="stacked">Email</IonLabel>
+                <IonInput
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onIonInput={(e) => setEmail(e.detail.value!)}
+                />
+              </IonItem>
+
+              <IonItem>
+                <IonLabel position="stacked">Password</IonLabel>
+                <IonInput
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  value={password}
+                  onIonInput={(e) => setPassword(e.detail.value!)}
+                />
+                <IonButton fill="clear" slot="end" onClick={() => setShowPassword(!showPassword)}>
+                  <IonIcon icon={showPassword ? eyeOff : eye} />
+                </IonButton>
+              </IonItem>
+
+              <IonButton expand="full" className="login-btn" onClick={doLogin}>
+                Login
+              </IonButton>
+
+              <IonRow className="ion-justify-content-center ion-padding-top">
+              <IonText>Way account? Hala Lupad </IonText>
+  <IonText
+    color="primary"
+    className="ion-text-bold"
+    onClick={() => navigation.push("/register", "forward")}
+    style={{ cursor: "pointer", marginLeft: "4px" }} // Ensures spacing
+  >
+    Sign up
+  </IonText>
+              </IonRow>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
       </IonContent>
-
-      <style>
-        {`
-          .login-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            padding: 20px;
-          }
-
-          .login-container h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
-          }
-
-          .login-container p {
-            color: gray;
-            margin-bottom: 20px;
-          }
-
-          .input-field {
-            width: 100%;
-            max-width: 400px;
-            margin-bottom: 15px;
-            border-radius: 10px;
-          }
-
-          .password-toggle {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 10;
-          }
-
-          .login-btn {
-            width: 100%;
-            max-width: 400px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-          }
-
-          .register-link {
-            margin-top: 10px;
-            font-size: 14px;
-          }
-
-          .register-link a {
-            color: #3880ff;
-            text-decoration: none;
-            font-weight: bold;
-          }
-        `}
-      </style>
     </IonPage>
   );
 };
