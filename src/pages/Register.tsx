@@ -1,161 +1,114 @@
-import { 
+import {
   IonButton,
-  IonContent, 
-  IonHeader, 
-  IonInput, 
-  IonInputPasswordToggle, 
-  IonItem, 
-  IonList, 
-  IonPage, 
-  IonTitle, 
-  IonToolbar,
+  IonContent,
+  IonInput,
+  IonInputPasswordToggle,
+  IonItem,
+  IonList,
+  IonPage,
   IonLabel,
   IonText,
   IonAlert,
-  useIonRouter
-} from '@ionic/react';
-import { useState } from 'react';
+  useIonRouter,
+  IonGrid,
+  IonRow,
+  IonCol,
+} from "@ionic/react";
+import { useState } from "react";
 
 const Register: React.FC = () => {
-const navigation = useIonRouter(); // Ionic Router for navigation
+  const navigation = useIonRouter();
 
-// State to manage form inputs
-const [username, setUsername] = useState('');
-const [firstName, setFirstName] = useState('');
-const [lastName, setLastName] = useState('');
-const [email, setEmail] = useState('');
-const [password, setPassword] = useState('');
-const [confirmPassword, setConfirmPassword] = useState('');
+  // State variables
+  const [username, setUsername] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
-// State for error messages
-const [error, setError] = useState('');
+  // Handle registration
+  const handleRegister = () => {
+    if (!username || !fullName || !email || !password || !confirmPassword) {
+      setError("All fields are required.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
 
-// State for success alert
-const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    setError("");
+    setShowSuccessAlert(true);
+  };
 
-// Function to handle form submission
-const handleRegister = () => {
-  if (!username || !firstName || !lastName || !email || !password || !confirmPassword) {
-    setError('All fields are required.');
-    return;
-  }
+  const handleSuccessDismiss = () => {
+    setShowSuccessAlert(false);
+    navigation.push("/it35-lab", "root");
+  };
 
-  if (password !== confirmPassword) {
-    setError('Passwords do not match.');
-    return;
-  }
+  return (
+    <IonPage>
+      <IonContent className="ion-padding">
+        <IonGrid className="ion-text-center ion-justify-content-center ion-align-items-center" style={{ height: "100vh" }}>
+          <IonRow className="ion-justify-content-center">
+            <IonCol size-md="6" size-lg="4">
+              <h2>Welcome to NBSC-ICS!</h2>
+              <p>Create an account to get started</p>
 
-  setError(''); // Clear errors if validation passes
+              <IonList>
+                <IonItem>
+                  <IonLabel position="stacked">Username</IonLabel>
+                  <IonInput type="text" placeholder="Enter your username" value={username} onIonInput={(e) => setUsername(e.detail.value!)} />
+                </IonItem>
 
-  // Show success alert
-  setShowSuccessAlert(true);
-};
+                <IonItem>
+                  <IonLabel position="stacked">Full Name</IonLabel>
+                  <IonInput type="text" placeholder="Enter your full name" value={fullName} onIonInput={(e) => setFullName(e.detail.value!)} />
+                </IonItem>
 
-// Function to handle success alert dismissal and redirect to home page
-const handleSuccessDismiss = () => {
-  setShowSuccessAlert(false);
-  navigation.push('/it35-lab', 'root'); // Redirect to home page
-};
+                <IonItem>
+                  <IonLabel position="stacked">Email</IonLabel>
+                  <IonInput type="email" placeholder="Enter your email" value={email} onIonInput={(e) => setEmail(e.detail.value!)} />
+                </IonItem>
 
-return (
-  <IonPage>
-    {/* Header Section */}
-    <IonHeader>
-      <IonToolbar>
-        <IonTitle>Register</IonTitle>
-      </IonToolbar>
-    </IonHeader>
+                <IonItem>
+                  <IonLabel position="stacked">Password</IonLabel>
+                  <IonInput type="password" placeholder="Enter your password" value={password} onIonInput={(e) => setPassword(e.detail.value!)}>
+                    <IonInputPasswordToggle slot="end" />
+                  </IonInput>
+                </IonItem>
 
-    {/* Registration Form */}
-    <IonContent className="ion-padding">
-      <IonList>
-        <IonItem>
-          <IonLabel position="stacked">Username</IonLabel>
-          <IonInput 
-            type="text" 
-            placeholder="Enter your username" 
-            value={username} 
-            onIonInput={(e) => setUsername(e.detail.value!)}
-          />
-        </IonItem>
+                <IonItem>
+                  <IonLabel position="stacked">Confirm Password</IonLabel>
+                  <IonInput type="password" placeholder="Confirm your password" value={confirmPassword} onIonInput={(e) => setConfirmPassword(e.detail.value!)}>
+                    <IonInputPasswordToggle slot="end" />
+                  </IonInput>
+                </IonItem>
+              </IonList>
 
-        <IonItem>
-          <IonLabel position="stacked">First Name</IonLabel>
-          <IonInput 
-            type="text" 
-            placeholder="Enter your first name" 
-            value={firstName} 
-            onIonInput={(e) => setFirstName(e.detail.value!)}
-          />
-        </IonItem>
+              {error && (
+                <IonText color="danger">
+                  <p>{error}</p>
+                </IonText>
+              )}
 
-        <IonItem>
-          <IonLabel position="stacked">Last Name</IonLabel>
-          <IonInput 
-            type="text" 
-            placeholder="Enter your last name" 
-            value={lastName} 
-            onIonInput={(e) => setLastName(e.detail.value!)}
-          />
-        </IonItem>
+              <IonButton expand="full" fill="solid" onClick={handleRegister}>
+                Register
+              </IonButton>
 
-        <IonItem>
-          <IonLabel position="stacked">Email</IonLabel>
-          <IonInput 
-            type="email" 
-            placeholder="Enter your email" 
-            value={email} 
-            onIonInput={(e) => setEmail(e.detail.value!)}
-          />
-        </IonItem>
+              <IonButton expand="full" fill="outline" onClick={() => navigation.push("/login", "back")}>
+                Back to Log In
+              </IonButton>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
 
-        <IonItem>
-          <IonLabel position="stacked">Password</IonLabel>
-          <IonInput 
-            type="password" 
-            placeholder="Enter your password" 
-            value={password} 
-            onIonInput={(e) => setPassword(e.detail.value!)}
-          >
-            <IonInputPasswordToggle slot="end" />
-          </IonInput>
-        </IonItem>
-
-        <IonItem>
-          <IonLabel position="stacked">Confirm Password</IonLabel>
-          <IonInput 
-            type="password" 
-            placeholder="Confirm your password" 
-            value={confirmPassword} 
-            onIonInput={(e) => setConfirmPassword(e.detail.value!)}
-          >
-            <IonInputPasswordToggle slot="end" />
-          </IonInput>
-        </IonItem>
-      </IonList>
-
-      {/* Error Message Display */}
-      {error && <IonText color="danger"><p>{error}</p></IonText>}
-
-      {/* Register and Login Buttons */}
-      <IonButton expand="full" fill="solid" onClick={handleRegister}>
-        Register
-      </IonButton>
-      <IonButton expand="full" fill="outline" onClick={() => navigation.push('/login', 'back')}>
-        Login
-      </IonButton>
-
-      {/* Success Alert */}
-      <IonAlert
-        isOpen={showSuccessAlert}
-        onDidDismiss={handleSuccessDismiss}
-        header="Success"
-        message="Registration Complete!"
-        buttons={["OK"]}
-      />
-    </IonContent>
-  </IonPage>
-);
+        <IonAlert isOpen={showSuccessAlert} onDidDismiss={handleSuccessDismiss} header="Success" message="Registration Complete!" buttons={["OK"]} />
+      </IonContent>
+    </IonPage>
+  );
 };
 
 export default Register;
