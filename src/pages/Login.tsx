@@ -26,11 +26,7 @@ const Login: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle> Login/SignUp ni Jhong. Busy ko, ay kog kuana !</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <IonHeader></IonHeader>
       <IonContent className="ion-padding" fullscreen>
         <div className="login-container">
           <h2>Welcome to NBSC-ICS !</h2>
@@ -67,6 +63,17 @@ const Login: React.FC = () => {
           <IonButton expand="full" className="login-btn" onClick={doLogin}>
             Login
           </IonButton>
+
+          {/* Forgot Password Link */}
+          <p className="forgot-password">
+            <span
+              style={{ color: "blue", cursor: "pointer", fontWeight: "bold" }}
+              onClick={() => navigation.push("/forgot-password", "forward")}
+            >
+              Forgot Password?
+            </span>
+          </p>
+
           <p className="register-link">
             Way account? Hala Lupad{" "}
             <span
@@ -122,15 +129,15 @@ const Login: React.FC = () => {
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
           }
 
+          .forgot-password {
+            margin-top: 10px;
+            font-size: 14px;
+            text-align: center;
+          }
+
           .register-link {
             margin-top: 10px;
             font-size: 14px;
-          }
-
-          .register-link a {
-            color: #3880ff;
-            text-decoration: none;
-            font-weight: bold;
           }
         `}
       </style>
