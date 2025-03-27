@@ -28,15 +28,25 @@ const Feed: React.FC = () => {
         <IonCard>
           <IonCardHeader>
             <IonCardTitle>Jhong Title</IonCardTitle>
-            <IonCardSubtitle>Card Subtitle</IonCardSubtitle>
+            <IonCardSubtitle>Owahaha</IonCardSubtitle>
           </IonCardHeader>
 
-          <IonCardContent>
-            Ako nagud ni naunsa diay mo . 
-          </IonCardContent>
+          <IonCardContent>Ako nagud ni naunsa diay mo .</IonCardContent>
+          <IonButton
+            fill="clear"
+            href="https://www.facebook.com/justjhongexd"
+            target="_blank"
+          >
+            Facebook
+          </IonButton>
 
-          <IonButton fill="clear">Action 1</IonButton>
-          <IonButton fill="clear">Action 2</IonButton>
+          <IonButton
+            fill="clear"
+            href="https://github.com/JustJhong609"
+            target="_blank"
+          >
+            Github
+          </IonButton>
         </IonCard>
         <IonCard>
           <IonCardHeader>
@@ -66,7 +76,6 @@ const Feed: React.FC = () => {
           <IonButton fill="clear">Action 1</IonButton>
           <IonButton fill="clear">Action 2</IonButton>
         </IonCard>
-        
       </IonContent>
     </IonPage>
   );
