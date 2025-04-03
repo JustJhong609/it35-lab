@@ -15,7 +15,7 @@ import {
   useIonRouter
 } from '@ionic/react';
 import { useState } from 'react';
-import { supabase } from "../supabaseClient";
+import  supabase  from "../supabaseClient";
 
 
 const Register: React.FC = () => {

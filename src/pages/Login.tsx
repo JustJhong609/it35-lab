@@ -17,7 +17,7 @@ import {
 } from "@ionic/react";
 import { eye, eyeOff } from "ionicons/icons";
 import { useState } from "react";
-import {supabase} from "../supabaseClient";
+import supabase from "../supabaseClient";
 
 const Login: React.FC = () => {
   const navigation = useIonRouter();
