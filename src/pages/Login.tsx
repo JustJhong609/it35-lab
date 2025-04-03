@@ -6,22 +6,36 @@ import {
   IonItem,
   IonLabel,
   IonPage,
-  IonTitle,
-  IonToolbar,
   useIonRouter,
   IonIcon,
 } from "@ionic/react";
 import { eye, eyeOff } from "ionicons/icons";
 import { useState } from "react";
+import  supabase  from "../supabaseClient";
 
 const Login: React.FC = () => {
   const navigation = useIonRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false); // New: Loading state
 
-  const doLogin = () => {
-    navigation.push("/it35-lab/app", "forward", "replace");
+  const doLogin = async () => {
+    setLoading(true); // Show loading state
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      alert("Login failed: " + error.message);
+    } else {
+      alert("Login successful!");
+      navigation.push("/it35-lab/app", "forward", "replace");
+    }
+
+    setLoading(false); // Reset loading state
   };
 
   return (
@@ -60,11 +74,15 @@ const Login: React.FC = () => {
             </IonButton>
           </IonItem>
 
-          <IonButton expand="full" className="login-btn" onClick={doLogin}>
-            Login
+          <IonButton
+            expand="full"
+            className="login-btn"
+            onClick={doLogin}
+            disabled={loading} // Disable button when loading
+          >
+            {loading ? "Logging in..." : "Login"}
           </IonButton>
 
-          {/* Forgot Password Link */}
           <p className="forgot-password">
             <span
               style={{ color: "blue", cursor: "pointer", fontWeight: "bold" }}
