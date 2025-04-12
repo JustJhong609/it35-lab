@@ -38,3 +38,5 @@ const Feed: React.FC = () => {
 };
 
 export default Feed;
+
+//feed must connect to feedcontainer.tsx
