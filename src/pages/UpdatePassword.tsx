@@ -12,7 +12,7 @@ import {
   IonAlert,
 } from "@ionic/react";
 import { useState } from "react";
-import  supabase  from "../supabaseClient"; // Import Supabase client
+import  supabase  from "../utils/supabaseClient"; // Import Supabase client
 
 const UpdatePassword: React.FC = () => {
   const navigation = useIonRouter();

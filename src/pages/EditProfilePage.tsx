@@ -4,10 +4,10 @@ import {
   IonBackButton, IonButtons, IonItem, IonText, IonCol, IonGrid,
   IonRow, IonInputPasswordToggle, IonImg, IonAvatar,
 } from '@ionic/react';
-import  supabase  from '../supabaseClient';
+import  supabase  from '../utils/supabaseClient';
 import { useHistory } from 'react-router-dom';
 
-const EditAccount: React.FC = () => {
+const EditProfile: React.FC = () => {
     const [email, setEmail] = useState('');
     const [currentPassword, setCurrentPassword] = useState('');
     const [password, setPassword] = useState('');
@@ -37,7 +37,7 @@ const EditAccount: React.FC = () => {
           // Fetch user details from Supabase using the session's email
           const { data: user, error: userError } = await supabase
             .from('users')
-            .select('*')
+            .select('user_firstname, user_lastname, user_avatar_url, user_email, username')
             .eq('user_email', session.session.user.email) // Use email from the session
             .single();
       
@@ -323,4 +323,4 @@ const EditAccount: React.FC = () => {
     );
   };
   
-  export default EditAccount;
+  export default EditProfile;
