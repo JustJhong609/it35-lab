@@ -8,6 +8,7 @@ import {
   IonPage,
   useIonRouter,
   IonIcon,
+  IonToolbar,
 } from "@ionic/react";
 import { eye, eyeOff } from "ionicons/icons";
 import { useState } from "react";
@@ -18,11 +19,10 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false); // New: Loading state
+  const [loading, setLoading] = useState(false);
 
   const doLogin = async () => {
-    setLoading(true); // Show loading state
-
+    setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -35,18 +35,18 @@ const Login: React.FC = () => {
       navigation.push("/it35-lab/app", "forward", "replace");
     }
 
-    setLoading(false); // Reset loading state
+    setLoading(false);
   };
 
   return (
     <IonPage>
-      <IonHeader></IonHeader>
       <IonContent className="ion-padding" fullscreen>
         <div className="login-container">
-          <h2>Welcome to NBSC-ICS !</h2>
-          <p>Please lupad to continue</p>
+        <img src="/logo.png" alt="NBSC Logo" className="logo-img" />
+          <h2 className="glow-text">Welcome to NBSC-ICS !</h2>
+          <p className="subtle-text">Please login to continue</p>
 
-          <IonItem className="input-field">
+          <IonItem className="input-field glass">
             <IonLabel position="stacked">Email</IonLabel>
             <IonInput
               type="email"
@@ -56,7 +56,7 @@ const Login: React.FC = () => {
             />
           </IonItem>
 
-          <IonItem className="input-field">
+          <IonItem className="input-field glass">
             <IonLabel position="stacked">Password</IonLabel>
             <IonInput
               type={showPassword ? "text" : "password"}
@@ -76,16 +76,15 @@ const Login: React.FC = () => {
 
           <IonButton
             expand="full"
-            className="login-btn"
+            className="login-btn bounce"
             onClick={doLogin}
-            disabled={loading} // Disable button when loading
+            disabled={loading}
           >
             {loading ? "Logging in..." : "Login"}
           </IonButton>
 
           <p className="forgot-password">
             <span
-              style={{ color: "blue", cursor: "pointer", fontWeight: "bold" }}
               onClick={() => navigation.push("/forgot-password", "forward")}
             >
               Forgot Password?
@@ -94,10 +93,7 @@ const Login: React.FC = () => {
 
           <p className="register-link">
             Way account? Hala Lupad{" "}
-            <span
-              style={{ color: "blue", cursor: "pointer", fontWeight: "bold" }}
-              onClick={() => navigation.push("/register", "forward")}
-            >
+            <span onClick={() => navigation.push("/register", "forward")}>
               Sign up
             </span>
           </p>
@@ -113,15 +109,18 @@ const Login: React.FC = () => {
       justify-content: center;
       height: 100%;
       padding: 20px;
+      background: linear-gradient(135deg, #1e1e2f, #2c3e50);
+      color: #fff;
     }
 
-    .login-container h2 {
-      font-size: 24px;
+    .glow-text {
+      font-size: 28px;
       margin-bottom: 10px;
+      text-shadow: 0 0 8px #58a6ff;
     }
 
-    .login-container p {
-      color: gray;
+    .subtle-text {
+      color: #c5c5c5;
       margin-bottom: 20px;
     }
 
@@ -129,7 +128,22 @@ const Login: React.FC = () => {
       width: 100%;
       max-width: 400px;
       margin-bottom: 15px;
-      border-radius: 10px;
+      border-radius: 15px;
+      overflow: hidden;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .input-field:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(88, 166, 255, 0.4);
+      box-shadow: 0 0 8px rgba(88, 166, 255, 0.3);
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .password-toggle {
@@ -137,46 +151,65 @@ const Login: React.FC = () => {
       right: 10px;
       top: 50%;
       transform: translateY(-50%);
-      z-index: 10;
     }
 
     .login-btn {
       width: 100%;
       max-width: 400px;
-      border-radius: 10px;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-      transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+      margin-top: 10px;
+      border-radius: 20px;
+      background: linear-gradient(90deg, #4e9af1, #007bff);
+      color: white;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+      transition: all 0.3s ease;
     }
 
     .login-btn:hover {
-      background-color: #3880ff; /* Slightly deeper blue */
-      transform: scale(1.02);
-      box-shadow: 0px 6px 12px rgba(56, 128, 255, 0.3);
+      transform: scale(1.03);
+      box-shadow: 0 6px 18px rgba(0, 123, 255, 0.6);
+    }
+
+    .bounce {
+      animation: bounce-in 0.8s ease;
+    }
+
+    @keyframes bounce-in {
+      0% { transform: scale(0.95); opacity: 0; }
+      60% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+
+    .forgot-password,
+    .register-link {
+      font-size: 14px;
+      margin-top: 10px;
+      text-align: center;
     }
 
     .forgot-password span,
     .register-link span {
-      color: blue;
-      cursor: pointer;
+      color: #66b3ff;
       font-weight: bold;
-      transition: color 0.3s;
+      cursor: pointer;
+      transition: color 0.3s ease;
     }
 
     .forgot-password span:hover,
     .register-link span:hover {
-      color: #0056b3; /* darker blue on hover */
+      color: #0090ff;
       text-decoration: underline;
     }
-
-    .forgot-password {
-      margin-top: 10px;
-      font-size: 14px;
-      text-align: center;
+      .logo-img {
+      width: 100px;
+      height: auto;
+      margin-bottom: 20px;
+      animation: fadeIn 1s ease-in-out;
     }
 
-    .register-link {
-      margin-top: 10px;
-      font-size: 14px;
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(-10px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
   `}
       </style>
