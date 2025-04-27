@@ -1,16 +1,13 @@
 import {
   IonButton,
   IonContent,
-  IonHeader,
   IonInput,
-  IonItem,
-  IonLabel,
   IonPage,
+  IonText,
   useIonRouter,
-  IonIcon,
-  IonToolbar,
+  IonInputPasswordToggle,
+  IonAlert
 } from "@ionic/react";
-import { eye, eyeOff } from "ionicons/icons";
 import { useState } from "react";
 import supabase from "../utils/supabaseClient";
 
@@ -18,20 +15,18 @@ const Login: React.FC = () => {
   const navigation = useIonRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
 
   const doLogin = async () => {
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
-      alert("Login failed: " + error.message);
+      setAlertMessage("Login failed: " + error.message);
+      setShowAlert(true);
     } else {
-      alert("Login successful!");
       navigation.push("/it35-lab/app", "forward", "replace");
     }
 
@@ -39,180 +34,267 @@ const Login: React.FC = () => {
   };
 
   return (
-    <IonPage>
-      <IonContent className="ion-padding" fullscreen>
-        <div className="login-container">
-        <img src="/logo.png" alt="NBSC Logo" className="logo-img" />
-          <h2 className="glow-text">Welcome to NBSC-ICS !</h2>
-          <p className="subtle-text">Please login to continue</p>
-
-          <IonItem className="input-field glass">
-            <IonLabel position="stacked">Email</IonLabel>
-            <IonInput
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onIonInput={(e) => setEmail(e.detail.value!)}
-            />
-          </IonItem>
-
-          <IonItem className="input-field glass">
-            <IonLabel position="stacked">Password</IonLabel>
-            <IonInput
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
-              value={password}
-              onIonInput={(e) => setPassword(e.detail.value!)}
-            />
-            <IonButton
-              fill="clear"
-              slot="end"
-              onClick={() => setShowPassword(!showPassword)}
-              className="password-toggle"
-            >
-              <IonIcon icon={showPassword ? eyeOff : eye} />
-            </IonButton>
-          </IonItem>
-
-          <IonButton
-            expand="full"
-            className="login-btn bounce"
-            onClick={doLogin}
-            disabled={loading}
-          >
-            {loading ? "Logging in..." : "Login"}
-          </IonButton>
-
-          <p className="forgot-password">
-            <span
-              onClick={() => navigation.push("/forgot-password", "forward")}
-            >
-              Forgot Password?
-            </span>
-          </p>
-
-          <p className="register-link">
-            Way account? Hala Lupad{" "}
-            <span onClick={() => navigation.push("/register", "forward")}>
-              Sign up
-            </span>
-          </p>
+    <IonPage className="login-page">
+      <IonContent fullscreen className="ion-padding">
+        <div className="background-container">
+          <div className="shape shape-1"></div>
+          <div className="shape shape-2"></div>
+          <div className="shape shape-3"></div>
         </div>
+
+        <div className="form-container">
+          <div className="glass-card">
+            <h1 className="form-title">Welcome back</h1>
+            <p className="form-subtitle">Sign in with your credentials</p>
+
+            <IonInput 
+              className="custom-input"
+              label="Email" 
+              labelPlacement="stacked" 
+              fill="outline" 
+              type="email" 
+              placeholder="Enter your email" 
+              value={email} 
+              onIonInput={(e) => setEmail(e.detail.value!)} 
+            />
+
+            <IonInput 
+              className="custom-input"
+              label="Password" 
+              labelPlacement="stacked" 
+              fill="outline" 
+              type="password" 
+              placeholder="Enter your password" 
+              value={password} 
+              onIonInput={(e) => setPassword(e.detail.value!)} 
+            >
+              <IonInputPasswordToggle slot="end" />
+            </IonInput>
+
+            <IonButton
+              className="login-button"
+              expand="block"
+              onClick={doLogin}
+              disabled={loading}
+            >
+              {loading ? "Logging in..." : "LOGIN"}
+            </IonButton>
+
+            <IonButton
+              className="signup-button"
+              routerLink="/register"
+              expand="block"
+              fill="clear"
+              shape="round"
+            >
+              Don't have an account? Sign up
+            </IonButton>
+          </div>
+        </div>
+
+        <IonAlert
+          isOpen={showAlert}
+          onDidDismiss={() => setShowAlert(false)}
+          header="Notification"
+          message={alertMessage}
+          buttons={['OK']}
+          cssClass="custom-alert"
+        />
+
+        <style>{`
+          /* Main Page Styles */
+          .login-page {
+            --ion-background-color: transparent;
+          }
+          
+          .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+          }
+          
+          .shape {
+            position: absolute;
+            border-radius: 50%;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: float 15s infinite ease-in-out;
+          }
+          
+          .shape-1 {
+            width: 300px;
+            height: 300px;
+            top: -50px;
+            left: -50px;
+            animation-delay: 0s;
+          }
+          
+          .shape-2 {
+            width: 200px;
+            height: 200px;
+            bottom: -50px;
+            right: -50px;
+            animation-delay: 5s;
+          }
+          
+          .shape-3 {
+            width: 150px;
+            height: 150px;
+            top: 40%;
+            right: 20%;
+            animation-delay: 10s;
+          }
+          
+          @keyframes float {
+            0%, 100% {
+              transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+              transform: translate(50px, 50px) rotate(5deg);
+            }
+            50% {
+              transform: translate(0, 100px) rotate(0deg);
+            }
+            75% {
+              transform: translate(-50px, 50px) rotate(-5deg);
+            }
+          }
+          
+          /* Form Container */
+          .form-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+          }
+          
+          .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            animation: fadeIn 0.5s ease-out;
+          }
+          
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          
+          .form-title {
+            color: white;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 1.8rem;
+          }
+          
+          .form-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1rem;
+          }
+          
+          /* Input Styles */
+          .custom-input {
+            --background: rgba(255, 255, 255, 0.1);
+            --color: white;
+            --border-color: rgba(255, 255, 255, 0.3);
+            --border-radius: 12px;
+            --highlight-color-focused: rgba(255, 255, 255, 0.5);
+            --padding-start: 15px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+          }
+          
+          .custom-input:hover {
+            --background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+          }
+          
+          .custom-input::part(label) {
+            color: white;
+            font-weight: 500;
+          }
+          
+          .custom-input::part(placeholder) {
+            color: rgba(255, 255, 255, 0.7);
+          }
+          
+          /* Button Styles */
+          .login-button {
+            --background: linear-gradient(135deg, #6e8efb, #a777e3);
+            --background-hover: linear-gradient(135deg, #5d7de8, #9666d6);
+            --background-activated: linear-gradient(135deg, #5d7de8, #9666d6);
+            --border-radius: 12px;
+            --box-shadow: 0 4px 15px rgba(110, 142, 251, 0.4);
+            margin-top: 10px;
+            margin-bottom: 15px;
+            height: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+          }
+          
+          .login-button:hover {
+            --box-shadow: 0 6px 20px rgba(110, 142, 251, 0.6);
+            transform: translateY(-3px) scale(1.02);
+          }
+          
+          .login-button:active {
+            transform: translateY(1px);
+          }
+          
+          .signup-button {
+            --color: white;
+            --background-hover: rgba(255, 255, 255, 0.1);
+            font-weight: 500;
+          }
+          
+          /* Alert Styles */
+          .custom-alert {
+            --backdrop-opacity: 0.8;
+            --background: rgba(40, 40, 80, 0.9);
+            --border-radius: 15px;
+            --box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --header-color: white;
+            --message-color: rgba(255, 255, 255, 0.8);
+            animation: alertPop 0.3s ease-out;
+          }
+          
+          @keyframes alertPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            80% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+          }
+          
+          .custom-alert .alert-button-group {
+            justify-content: center;
+          }
+          
+          .custom-alert .alert-button {
+            --background: linear-gradient(135deg, #6e8efb, #a777e3);
+            --color: white;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 15px rgba(110, 142, 251, 0.4);
+            min-width: 100px;
+          }
+        `}</style>
       </IonContent>
-
-      <style>
-        {`
-    .login-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      padding: 20px;
-      background: linear-gradient(135deg, #1e1e2f, #2c3e50);
-      color: #fff;
-    }
-
-    .glow-text {
-      font-size: 28px;
-      margin-bottom: 10px;
-      text-shadow: 0 0 8px #58a6ff;
-    }
-
-    .subtle-text {
-      color: #c5c5c5;
-      margin-bottom: 20px;
-    }
-
-    .input-field {
-      width: 100%;
-      max-width: 400px;
-      margin-bottom: 15px;
-      border-radius: 15px;
-      overflow: hidden;
-      position: relative;
-      transition: all 0.3s ease;
-    }
-
-    .input-field:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(88, 166, 255, 0.4);
-      box-shadow: 0 0 8px rgba(88, 166, 255, 0.3);
-    }
-
-    .glass {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .password-toggle {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    .login-btn {
-      width: 100%;
-      max-width: 400px;
-      margin-top: 10px;
-      border-radius: 20px;
-      background: linear-gradient(90deg, #4e9af1, #007bff);
-      color: white;
-      font-weight: bold;
-      box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
-      transition: all 0.3s ease;
-    }
-
-    .login-btn:hover {
-      transform: scale(1.03);
-      box-shadow: 0 6px 18px rgba(0, 123, 255, 0.6);
-    }
-
-    .bounce {
-      animation: bounce-in 0.8s ease;
-    }
-
-    @keyframes bounce-in {
-      0% { transform: scale(0.95); opacity: 0; }
-      60% { transform: scale(1.05); opacity: 1; }
-      100% { transform: scale(1); }
-    }
-
-    .forgot-password,
-    .register-link {
-      font-size: 14px;
-      margin-top: 10px;
-      text-align: center;
-    }
-
-    .forgot-password span,
-    .register-link span {
-      color: #66b3ff;
-      font-weight: bold;
-      cursor: pointer;
-      transition: color 0.3s ease;
-    }
-
-    .forgot-password span:hover,
-    .register-link span:hover {
-      color: #0090ff;
-      text-decoration: underline;
-    }
-      .logo-img {
-      width: 100px;
-      height: auto;
-      margin-bottom: 20px;
-      animation: fadeIn 1s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      0% { opacity: 0; transform: translateY(-10px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-  `}
-      </style>
     </IonPage>
   );
 };
