@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
 import { IonApp, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonInput, IonLabel, IonModal, IonFooter, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonAlert, IonText, IonAvatar, IonCol, IonGrid, IonRow, IonIcon, IonPopover } from '@ionic/react';
 import { User } from '@supabase/supabase-js';
-import  supabase  from '../utils/supabaseClient';
-import { colorFill, pencil, trash } from 'ionicons/icons';
-import { heartOutline, chatbubbleOutline, shareSocialOutline, images, playCircle } from 'ionicons/icons';
-import { personAddOutline, happyOutline } from 'ionicons/icons';
-
+import supabase from '../utils/supabaseClient';
+import { trash } from 'ionicons/icons';
+import { arrowUpCircle, arrowDownCircle, chatbubbleOutline, shareSocialOutline, imageOutline, videocamOutline, ellipsisHorizontal } from 'ionicons/icons'; // Added new icons
 
 interface Post {
   post_id: string;
@@ -53,21 +51,21 @@ const FeedContainer = () => {
 
   const createPost = async () => {
     if (!postContent || !user || !username) return;
-  
+
     // Fetch avatar URL
     const { data: userData, error: userError } = await supabase
       .from('users')
       .select('user_avatar_url')
       .eq('user_id', user.id)
       .single();
-  
+
     if (userError) {
       console.error('Error fetching user avatar:', userError);
       return;
     }
-  
+
     const avatarUrl = userData?.user_avatar_url || 'https://ionicframework.com/docs/img/demos/avatar.svg';
-  
+
     // Insert post with avatar URL
     const { data, error } = await supabase
       .from('posts')
@@ -75,11 +73,11 @@ const FeedContainer = () => {
         { post_content: postContent, user_id: user.id, username, avatar_url: avatarUrl }
       ])
       .select('*');
-  
+
     if (!error && data) {
       setPosts([data[0] as Post, ...posts]);
     }
-  
+
     setPostContent('');
   };
 
@@ -114,236 +112,239 @@ const FeedContainer = () => {
   return (
     <>
       <IonContent style={{
-       '--background': 'linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)',
-'--ion-item-background': 'rgba(204, 35, 102, 0.7)', /* #cc2366 with opacity */
-'--ion-toolbar-background': 'rgba(220, 39, 67, 0.8)'  /* #dc2743 with opacity */
-
-
+        '--background': '#1a1a1b', // Dark background for Reddit theme
       }}>
         {user ? (
           <>
             <IonCard style={{
-  margin: '16px',
-  borderRadius: '16px',
-  background: 'rgba(255, 240, 240, 0.8)',
-  backdropFilter: 'blur(10px)',
-  boxShadow: '0 4px 20px rgba(100, 100, 100, 0.15)',
-  border: '1px solid rgba(200, 200, 200, 0.2)'
-}}>
-  <IonCardHeader style={{
-    borderBottom: '1px solid rgba(200, 200, 200, 0.2)',
-    paddingBottom: '12px'
-  }}>
-    <IonCardTitle style={{
-      color: 'black',
-      fontWeight: '600',
-      fontSize: '1.4rem'
-    }}>Create Post</IonCardTitle>
-  </IonCardHeader>
-  
-  <IonCardContent style={{ paddingTop: '16px' }}>
-    <IonInput
-      style={{
-        '--background': 'rgba(255, 255, 255, 0.7)',
-        '--border-radius': '12px',
-        '--padding-start': '12px',
-        '--placeholder-color': '#aaa',
-        '--color': 'black'
-      }}
-      value={postContent}
-      onIonChange={e => setPostContent(e.detail.value!)}
-      placeholder="What's on your mind?"
-    />
-  </IonCardContent>
-  
-  {/* Icon options row */}
-  <div style={{
-    display: 'flex',
-    justifyContent: 'space-around',
-    padding: '8px 16px',
-    borderTop: '1px solid rgba(200, 200, 200, 0.2)'
-  }}>
-    <IonButton 
-      fill="clear"
-      style={{
-        '--padding-start': '4px',
-        '--padding-end': '4px',
-        '--color': '#666'
-      }}
-    >
-      <IonIcon icon={images} style={{ fontSize: '1.4rem', marginRight: '4px', color: '#45BD62' }} />
-      <span style={{ fontSize: '0.9rem' }}>Photo</span>
-    </IonButton>
-    
-    <IonButton 
-      fill="clear"
-      style={{
-        '--padding-start': '4px',
-        '--padding-end': '4px',
-        '--color': '#666'
-      }}
-    >
-      <IonIcon icon={personAddOutline} style={{ fontSize: '1.4rem', marginRight: '4px', color: '#1877F2' }} />
-      <span style={{ fontSize: '0.9rem' }}>Tag People</span>
-    </IonButton>
-    
-    <IonButton 
-      fill="clear"
-      style={{
-        '--padding-start': '4px',
-        '--padding-end': '4px',
-        '--color': '#666'
-      }}
-    >
-      <IonIcon icon={happyOutline} style={{ fontSize: '1.4rem', marginRight: '4px', color: '#F7B928' }} />
-      <span style={{ fontSize: '0.9rem' }}>Feeling/Activity</span>
-    </IonButton>
-  </div>
-  
-  <div style={{ 
-    display: 'flex', 
-    justifyContent: 'flex-end', 
-    padding: '0.5rem',
-    borderTop: '1px solid rgba(200, 200, 200, 0.2)'
-  }}>
-    <IonButton 
-      onClick={createPost}
-      style={{
-        '--background': 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)',
-        '--background-hover': 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)',
-        '--background-activated': 'linear-gradient(135deg, #fad0c4 0%, #ff9a9e 100%)',
-        '--border-radius': '12px',
-        '--box-shadow': '0 2px 10px rgba(100, 100, 100, 0.1)',
-        '--color': 'white',
-        margin: '8px',
-        fontWeight: '600'
-      }}
-    >
-      Post
-    </IonButton>
-  </div>
-</IonCard>
-  
-            {posts.map(post => (
-              <IonCard key={post.post_id} style={{ 
-                margin: '16px',
-                marginTop: '2rem',
-                borderRadius: '16px',
-                background: 'rgba(255, 240, 240, 0.8)',
-                backdropFilter: 'blur(10px)',
-                boxShadow: '0 4px 20px rgba(100, 100, 100, 0.15)', // Changed to gray shadow
-                border: '1px solid rgba(200, 200, 200, 0.2)' // Lighter border
+              margin: '16px',
+              borderRadius: '8px',
+              background: '#2b2b2c', // Darker card background
+              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.4)', // Darker shadow
+              border: '1px solid #3d3d3e' // Subtle border
+            }}>
+              <IonCardHeader style={{
+                borderBottom: '1px solid #3d3d3e',
+                paddingBottom: '12px'
               }}>
-                <IonCardHeader style={{
-                  borderBottom: '1px solid rgba(200, 200, 200, 0.2)', // Lighter border
-                  padding: '12px 16px'
+                <IonCardTitle style={{
+                  color: '#d7dadc', // Light text for dark mode
+                  fontWeight: '600',
+                  fontSize: '1.2rem'
+                }}>Create Post</IonCardTitle>
+              </IonCardHeader>
+
+              <IonCardContent style={{ paddingTop: '16px' }}>
+                <IonInput
+                  style={{
+                    '--background': '#343536', // Darker input background
+                    '--border-radius': '4px',
+                    '--padding-start': '12px',
+                    '--placeholder-color': '#818384', // Lighter placeholder
+                    '--color': '#d7dadc' // Light text
+                  }}
+                  value={postContent}
+                  onIonChange={e => setPostContent(e.detail.value!)}
+                  placeholder="What's on your mind?"
+                />
+              </IonCardContent>
+
+              {/* Icon options row */}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-around',
+                padding: '8px 16px',
+                borderTop: '1px solid #3d3d3e'
+              }}>
+                <IonButton
+                  fill="clear"
+                  style={{
+                    '--padding-start': '4px',
+                    '--padding-end': '4px',
+                    '--color': '#818384' // Lighter icon color
+                  }}
+                >
+                  <IonIcon icon={imageOutline} style={{ fontSize: '1.2rem', marginRight: '4px', color: '#0079d3' }} /> {/* Reddit blue */}
+                  <span style={{ fontSize: '0.8rem' }}>Photo</span>
+                </IonButton>
+
+                <IonButton
+                  fill="clear"
+                  style={{
+                    '--padding-start': '4px',
+                    '--padding-end': '4px',
+                    '--color': '#818384'
+                  }}
+                >
+                  <IonIcon icon={videocamOutline} style={{ fontSize: '1.2rem', marginRight: '4px', color: '#46d160' }} /> {/* Reddit green */}
+                  <span style={{ fontSize: '0.8rem' }}>Video</span>
+                </IonButton>
+
+                <IonButton
+                  fill="clear"
+                  style={{
+                    '--padding-start': '4px',
+                    '--padding-end': '4px',
+                    '--color': '#818384'
+                  }}
+                >
+                  <IonIcon icon={chatbubbleOutline} style={{ fontSize: '1.2rem', marginRight: '4px', color: '#ff4500' }} /> {/* Reddit orange */}
+                  <span style={{ fontSize: '0.8rem' }}>Discussion</span>
+                </IonButton>
+              </div>
+
+              <div style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                padding: '0.5rem',
+                borderTop: '1px solid #3d3d3e'
+              }}>
+                <IonButton
+                  onClick={createPost}
+                  style={{
+                    '--background': '#0079d3', // Reddit blue
+                    '--background-hover': '#0085e6',
+                    '--background-activated': '#006ac2',
+                    '--border-radius': '4px',
+                    '--box-shadow': 'none',
+                    '--color': 'white',
+                    margin: '8px',
+                    fontWeight: '600',
+                    fontSize: '0.9rem'
+                  }}
+                >
+                  Post
+                </IonButton>
+              </div>
+            </IonCard>
+
+            {posts.map(post => (
+              <IonCard key={post.post_id} style={{
+                margin: '16px',
+                borderRadius: '8px',
+                background: '#2b2b2c',
+                boxShadow: '0 4px 10px rgba(0, 0, 0, 0.4)',
+                border: '1px solid #3d3d3e',
+                display: 'flex' // For side-by-side upvote/downvote
+              }}>
+                {/* Upvote/Downvote Section */}
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  padding: '12px 8px',
+                  background: '#212122', // Slightly darker background for vote column
+                  borderRight: '1px solid #3d3d3e',
+                  borderRadius: '8px 0 0 8px'
                 }}>
-                  <IonRow>
-                    <IonCol size="1.85">
-                      <IonAvatar style={{
-                        width: '48px',
-                        height: '48px',
-                        border: '2px solid rgba(200, 200, 200, 0.3)' // Lighter border
-                      }}>
-                        <img alt={post.username} src={post.avatar_url} />
-                      </IonAvatar>
-                    </IonCol>
-                    <IonCol>
-                      <IonCardTitle style={{ 
-                        marginTop: '10px',
-                        color: 'black', // Changed to black
-                        fontWeight: '600'
-                      }}>{post.username}</IonCardTitle>
-                      <IonCardSubtitle style={{
-                        color: '#666', // Darker gray
-                        fontSize: '0.8rem'
-                      }}>{new Date(post.post_created_at).toLocaleString()}</IonCardSubtitle>
-                    </IonCol>
-                    <IonCol size="auto">
-                      <IonButton
-                        fill="clear"
-                        style={{
-                          '--padding-start': '0',
-                          '--padding-end': '0',
-                          '--ripple-color': 'transparent'
-                        }}
-                        onClick={(e) =>
-                          setPopoverState({
-                            open: true,
-                            event: e.nativeEvent,
-                            postId: post.post_id,
-                          })
-                        }
-                      >
-                        <IonIcon 
-                          icon={pencil} 
-                          style={{
-                            color: '#666', // Darker gray
-                            fontSize: '1.2rem'
-                          }} 
-                        />
-                      </IonButton>
-                    </IonCol>
-                  </IonRow>
-                </IonCardHeader>
-  
-                <IonCardContent style={{ padding: '16px' }}>
-                  <IonText style={{ 
-                    color: 'black', // Changed to black
-                    lineHeight: '1.5'
-                  }}>
-                    <p style={{ 
-                      margin: 0,
-                      fontSize: '1rem',
-                      whiteSpace: 'pre-wrap'
-                    }}>{post.post_content}</p>
+                  <IonIcon icon={arrowUpCircle} style={{ fontSize: '1.8rem', color: '#818384', marginBottom: '4px' }} />
+                  <IonText style={{ color: '#d7dadc', fontSize: '0.9rem', fontWeight: 'bold' }}>
+                    <p>123</p> {/* Placeholder for vote count */}
                   </IonText>
-                </IonCardContent>
-                {/* INSERT ACTION BUTTONS HERE */}
-<div style={{
-  display: 'flex',
-  justifyContent: 'space-around',
-  padding: '8px 16px',
-  borderTop: '1px solid rgba(200, 200, 200, 0.2)'
-}}>
-  <IonButton 
-    fill="clear" 
-    style={{
-      '--padding-start': '4px',
-      '--padding-end': '4px',
-      '--color': '#666'
-    }}
-  >
-    <IonIcon icon={heartOutline} style={{ fontSize: '1.4rem', marginRight: '4px' }} />
-    <span style={{ fontSize: '0.9rem' }}>Like</span>
-  </IonButton>
-  
-  <IonButton 
-    fill="clear" 
-    style={{
-      '--padding-start': '4px',
-      '--padding-end': '4px',
-      '--color': '#666'
-    }}
-  >
-    <IonIcon icon={chatbubbleOutline} style={{ fontSize: '1.4rem', marginRight: '4px' }} />
-    <span style={{ fontSize: '0.9rem' }}>Comment</span>
-  </IonButton>
-  
-  <IonButton 
-    fill="clear" 
-    style={{
-      '--padding-start': '4px',
-      '--padding-end': '4px',
-      '--color': '#666'
-    }}
-  >
-    <IonIcon icon={shareSocialOutline} style={{ fontSize: '1.4rem', marginRight: '4px' }} />
-    <span style={{ fontSize: '0.9rem' }}>Share</span>
-  </IonButton>
-</div>
-{/* END OF ACTION BUTTONS INSERTION */}
-  
+                  <IonIcon icon={arrowDownCircle} style={{ fontSize: '1.8rem', color: '#818384', marginTop: '4px' }} />
+                </div>
+
+                <div style={{ flexGrow: 1 }}> {/* Main content area */}
+                  <IonCardHeader style={{
+                    borderBottom: '1px solid #3d3d3e',
+                    padding: '12px 16px'
+                  }}>
+                    <IonRow className="ion-align-items-center">
+                      <IonCol size="auto">
+                        <IonAvatar style={{
+                          width: '36px',
+                          height: '36px',
+                          border: '2px solid #818384'
+                        }}>
+                          <img alt={post.username} src={post.avatar_url} />
+                        </IonAvatar>
+                      </IonCol>
+                      <IonCol>
+                        <IonCardTitle style={{
+                          marginTop: '0px',
+                          color: '#d7dadc',
+                          fontWeight: '500',
+                          fontSize: '1rem'
+                        }}>{post.username}</IonCardTitle>
+                        <IonCardSubtitle style={{
+                          color: '#818384',
+                          fontSize: '0.75rem'
+                        }}>{new Date(post.post_created_at).toLocaleString()}</IonCardSubtitle>
+                      </IonCol>
+                      <IonCol size="auto">
+                        <IonButton
+                          fill="clear"
+                          style={{
+                            '--padding-start': '0',
+                            '--padding-end': '0',
+                            '--ripple-color': 'transparent',
+                            '--color': '#818384'
+                          }}
+                          onClick={(e) =>
+                            setPopoverState({
+                              open: true,
+                              event: e.nativeEvent,
+                              postId: post.post_id,
+                            })
+                          }
+                        >
+                          <IonIcon
+                            icon={ellipsisHorizontal} // Replaced pencil icon with ellipsis for more options
+                            style={{
+                              color: '#818384',
+                              fontSize: '1.2rem'
+                            }}
+                          />
+                        </IonButton>
+                      </IonCol>
+                    </IonRow>
+                  </IonCardHeader>
+
+                  <IonCardContent style={{ padding: '16px' }}>
+                    <IonText style={{
+                      color: '#d7dadc',
+                      lineHeight: '1.5'
+                    }}>
+                      <p style={{
+                        margin: 0,
+                        fontSize: '0.95rem',
+                        whiteSpace: 'pre-wrap'
+                      }}>{post.post_content}</p>
+                    </IonText>
+                  </IonCardContent>
+                  {/* Action buttons */}
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-around',
+                    padding: '8px 16px',
+                    borderTop: '1px solid #3d3d3e'
+                  }}>
+                    <IonButton
+                      fill="clear"
+                      style={{
+                        '--padding-start': '4px',
+                        '--padding-end': '4px',
+                        '--color': '#818384'
+                      }}
+                    >
+                      <IonIcon icon={chatbubbleOutline} style={{ fontSize: '1.2rem', marginRight: '4px' }} />
+                      <span style={{ fontSize: '0.85rem' }}>Comments</span>
+                    </IonButton>
+
+                    <IonButton
+                      fill="clear"
+                      style={{
+                        '--padding-start': '4px',
+                        '--padding-end': '4px',
+                        '--color': '#818384'
+                      }}
+                    >
+                      <IonIcon icon={shareSocialOutline} style={{ fontSize: '1.2rem', marginRight: '4px' }} />
+                      <span style={{ fontSize: '0.85rem' }}>Share</span>
+                    </IonButton>
+                  </div>
+                </div>
+
                 <IonPopover
                   isOpen={popoverState.open && popoverState.postId === post.post_id}
                   event={popoverState.event}
@@ -351,20 +352,20 @@ const FeedContainer = () => {
                     setPopoverState({ open: false, event: null, postId: null })
                   }
                   style={{
-                    '--background': 'rgba(255, 240, 240, 0.95)',
-                    '--box-shadow': '0 4px 20px rgba(100, 100, 100, 0.15)', // Gray shadow
-                    '--border-radius': '12px',
-                    '--backdrop-filter': 'blur(10px)'
+                    '--background': '#343536',
+                    '--box-shadow': '0 4px 20px rgba(0, 0, 0, 0.4)',
+                    '--border-radius': '4px',
                   }}
                 >
                   <IonButton
                     fill="clear"
                     style={{
-                      '--color': 'black', // Changed to black
-                      '--background-hover': 'rgba(200, 200, 200, 0.1)', // Lighter hover
+                      '--color': '#d7dadc',
+                      '--background-hover': '#4a4a4b',
                       width: '100%',
                       justifyContent: 'flex-start',
-                      paddingLeft: '16px'
+                      paddingLeft: '16px',
+                      fontSize: '0.9rem'
                     }}
                     onClick={() => {
                       startEditingPost(post);
@@ -377,11 +378,12 @@ const FeedContainer = () => {
                     fill="clear"
                     color="danger"
                     style={{
-                      '--color': '#ff4757',
-                      '--background-hover': 'rgba(200, 200, 200, 0.1)', // Lighter hover
+                      '--color': '#ff4500', // Reddit orange for danger
+                      '--background-hover': '#4a4a4b',
                       width: '100%',
                       justifyContent: 'flex-start',
-                      paddingLeft: '16px'
+                      paddingLeft: '16px',
+                      fontSize: '0.9rem'
                     }}
                     onClick={() => {
                       deletePost(post.post_id);
@@ -399,35 +401,35 @@ const FeedContainer = () => {
             display: 'block',
             textAlign: 'center',
             marginTop: '50%',
-            color: 'black', // Changed to black
+            color: '#d7dadc', // Light text for loading in dark mode
             fontSize: '1.2rem'
           }}>Loading...</IonLabel>
         )}
       </IonContent>
-  
+
       <IonModal isOpen={isModalOpen} onDidDismiss={() => setIsModalOpen(false)}>
         <IonHeader style={{
-          background: 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)'
+          background: '#1a1a1b' // Dark modal header
         }}>
           <IonToolbar>
             <IonTitle style={{
-              color: 'white',
+              color: '#d7dadc',
               fontWeight: '600',
               textAlign: 'center'
             }}>Edit Post</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent style={{
-          '--background': 'rgba(255, 240, 240, 0.9)',
+          '--background': '#2b2b2c', // Dark modal content
           padding: '16px'
         }}>
           <IonInput
             style={{
-              '--background': 'rgba(255, 255, 255, 0.8)',
-              '--border-radius': '12px',
+              '--background': '#343536',
+              '--border-radius': '4px',
               '--padding-start': '12px',
-              '--placeholder-color': '#aaa',
-              '--color': 'black', // Changed to black
+              '--placeholder-color': '#818384',
+              '--color': '#d7dadc',
               marginBottom: '16px'
             }}
             value={postContent}
@@ -436,41 +438,43 @@ const FeedContainer = () => {
           />
         </IonContent>
         <IonFooter style={{
-          background: 'transparent',
+          background: '#2b2b2c',
           padding: '8px 16px',
-          borderTop: '1px solid rgba(200, 200, 200, 0.2)' // Lighter border
+          borderTop: '1px solid #3d3d3e'
         }}>
-          <IonButton 
+          <IonButton
             onClick={savePost}
             style={{
-              '--background': 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)',
-              '--background-hover': 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)',
-              '--background-activated': 'linear-gradient(135deg, #fad0c4 0%, #ff9a9e 100%)',
-              '--border-radius': '12px',
-              '--box-shadow': '0 2px 10px rgba(100, 100, 100, 0.1)', // Gray shadow
+              '--background': '#0079d3',
+              '--background-hover': '#0085e6',
+              '--background-activated': '#006ac2',
+              '--border-radius': '4px',
+              '--box-shadow': 'none',
               '--color': 'white',
               marginRight: '8px',
-              fontWeight: '600'
+              fontWeight: '600',
+              fontSize: '0.9rem'
             }}
           >
             Save
           </IonButton>
-          <IonButton 
+          <IonButton
             onClick={() => setIsModalOpen(false)}
             style={{
-              '--background': 'rgba(255, 255, 255, 0.8)',
-              '--background-hover': 'rgba(255, 255, 255, 0.9)',
-              '--color': 'black', // Changed to black
-              '--border-radius': '12px',
-              '--box-shadow': '0 2px 10px rgba(100, 100, 100, 0.1)', // Gray shadow
-              fontWeight: '600'
+              '--background': '#343536',
+              '--background-hover': '#4a4a4b',
+              '--color': '#d7dadc',
+              '--border-radius': '4px',
+              '--box-shadow': 'none',
+              fontWeight: '600',
+              fontSize: '0.9rem'
             }}
           >
             Cancel
           </IonButton>
         </IonFooter>
       </IonModal>
-  
+
       <IonAlert
         isOpen={isAlertOpen}
         onDidDismiss={() => setIsAlertOpen(false)}
@@ -478,12 +482,12 @@ const FeedContainer = () => {
         message="Post updated successfully!"
         buttons={['OK']}
         style={{
-          '--background': 'rgba(255, 240, 240, 0.95)',
-          '--backdrop-filter': 'blur(10px)',
-          '--box-shadow': '0 4px 20px rgba(100, 100, 100, 0.15)', // Gray shadow
-          '--border-radius': '16px',
-          '--header-color': 'black', // Changed to black
-          '--message-color': '#333' // Darker gray
+          '--background': '#2b2b2c',
+          '--backdrop-filter': 'blur(5px)',
+          '--box-shadow': '0 4px 20px rgba(0, 0, 0, 0.4)',
+          '--border-radius': '8px',
+          '--header-color': '#d7dadc',
+          '--message-color': '#d7dadc'
         }}
       />
     </>
