@@ -18,7 +18,9 @@ import {
   IonCard,
   IonCardHeader,
   IonCardTitle,
-  IonCardContent
+  IonCardContent,
+  IonToolbar, // Added IonToolbar for consistent header
+  IonTitle // Added IonTitle for header title
 } from "@ionic/react";
 import supabase from "../utils/supabaseClient";
 import { useHistory } from "react-router-dom";
@@ -102,16 +104,20 @@ const EditAccount: React.FC = () => {
       return;
     }
 
-    const { error: passwordError } = await supabase.auth.signInWithPassword({
-      email: user.email,
-      password: currentPassword,
-    });
+    // Only attempt to sign in with password if currentPassword is provided and new password fields are being used
+    if (currentPassword && (password || confirmPassword)) {
+      const { error: passwordError } = await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: currentPassword,
+      });
 
-    if (passwordError) {
-      setAlertMessage("Incorrect current password.");
-      setShowAlert(true);
-      return;
+      if (passwordError) {
+        setAlertMessage("Incorrect current password.");
+        setShowAlert(true);
+        return;
+      }
     }
+
 
     let avatarUrl = avatarPreview;
 
@@ -174,44 +180,45 @@ const EditAccount: React.FC = () => {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonButtons slot="start">
-          <IonBackButton defaultHref="/it35-lab/app" />
-        </IonButtons>
+      <IonHeader style={{ background: '#222222' }}> {/* Dark header background */}
+        <IonToolbar style={{ '--background': '#222222', '--color': '#d7dadc' }}> {/* Toolbar matches header */}
+          <IonButtons slot="start">
+            <IonBackButton defaultHref="/it35-lab/app" style={{ '--color': '#d7dadc' }}/> {/* Light back button */}
+          </IonButtons>
+          <IonTitle style={{ color: '#d7dadc', fontWeight: 'bold' }}>Edit Profile</IonTitle> {/* Light title */}
+        </IonToolbar>
       </IonHeader>
       <IonContent
         style={{
-          "--background": "linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)",
-          "--ion-item-background": "rgba(204, 35, 102, 0.7)",
-          "--ion-toolbar-background": "rgba(220, 39, 67, 0.8)",
+          "--background": "#1a1a1b", // Dark background for the page content
         }}
       >
         <IonCard style={{
-          margin: '16px',
-          borderRadius: '16px',
-          background: 'rgba(255, 240, 240, 0.8)',
-          backdropFilter: 'blur(10px)',
-          boxShadow: '0 4px 20px rgba(100, 100, 100, 0.15)',
-          border: '1px solid rgba(200, 200, 200, 0.2)'
+          margin: '20px',
+          borderRadius: '8px',
+          background: '#2b2b2c', // Darker card background
+          boxShadow: '0 4px 10px rgba(0, 0, 0, 0.4)', // Darker shadow
+          border: '1px solid #3d3d3e' // Subtle border
         }}>
-          <IonCardHeader>
+          <IonCardHeader style={{ borderBottom: '1px solid #3d3d3e' }}>
             <IonCardTitle style={{
-              color: 'black',
+              color: '#d7dadc', // Light text for dark mode
               fontWeight: '600',
-              fontSize: '1.4rem'
-            }}>Modify your Account</IonCardTitle>
+              fontSize: '1.2rem',
+              paddingBottom: '10px'
+            }}>Modify Your Account</IonCardTitle>
           </IonCardHeader>
 
-          <IonCardContent>
+          <IonCardContent style={{ padding: '20px' }}>
             {/* Avatar Upload Section */}
-            <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+            <div style={{ textAlign: 'center', marginBottom: '30px' }}>
               {avatarPreview && (
                 <IonAvatar
                   style={{
-                    width: "120px",
-                    height: "120px",
-                    margin: "0 auto 10px",
-                    border: '2px solid rgba(200, 200, 200, 0.5)'
+                    width: "100px",
+                    height: "100px",
+                    margin: "0 auto 15px",
+                    border: '2px solid #818384' // Subtle border for avatar
                   }}
                 >
                   <IonImg src={avatarPreview} style={{ objectFit: "cover" }} />
@@ -229,13 +236,15 @@ const EditAccount: React.FC = () => {
               <IonButton
                 onClick={() => fileInputRef.current?.click()}
                 style={{
-                  '--background': 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)',
-                  '--background-hover': 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)',
-                  '--background-activated': 'linear-gradient(135deg, #fad0c4 0%, #ff9a9e 100%)',
-                  '--border-radius': '12px',
-                  '--box-shadow': '0 2px 10px rgba(100, 100, 100, 0.1)',
+                  '--background': '#0079d3', // Reddit blue
+                  '--background-hover': '#0085e6',
+                  '--background-activated': '#006ac2',
+                  '--border-radius': '4px',
+                  '--box-shadow': 'none',
                   '--color': 'white',
-                  fontWeight: '600'
+                  fontWeight: '600',
+                  fontSize: '0.9rem',
+                  height: '40px'
                 }}
               >
                 Upload Avatar
@@ -248,17 +257,19 @@ const EditAccount: React.FC = () => {
               labelPlacement="floating"
               fill="outline"
               style={{
-                '--background': 'rgba(255, 255, 255, 0.7)',
-                '--border-radius': '12px',
+                '--background': '#343536', // Darker input background
+                '--border-radius': '4px',
                 '--padding-start': '12px',
-                '--color': 'black',
+                '--color': '#d7dadc', // Light text
+                '--placeholder-color': '#818384',
+                '--border-color': '#4a4a4b', // Input border color
                 marginBottom: '16px'
               }}
               value={username}
               onIonChange={(e) => setUsername(e.detail.value!)}
             />
 
-            <IonGrid>
+            <IonGrid style={{ padding: '0' }}>
               <IonRow>
                 <IonCol>
                   <IonInput
@@ -266,10 +277,12 @@ const EditAccount: React.FC = () => {
                     labelPlacement="floating"
                     fill="outline"
                     style={{
-                      '--background': 'rgba(255, 255, 255, 0.7)',
-                      '--border-radius': '12px',
+                      '--background': '#343536',
+                      '--border-radius': '4px',
                       '--padding-start': '12px',
-                      '--color': 'black',
+                      '--color': '#d7dadc',
+                      '--placeholder-color': '#818384',
+                      '--border-color': '#4a4a4b',
                       marginBottom: '16px'
                     }}
                     value={firstName}
@@ -282,10 +295,12 @@ const EditAccount: React.FC = () => {
                     labelPlacement="floating"
                     fill="outline"
                     style={{
-                      '--background': 'rgba(255, 255, 255, 0.7)',
-                      '--border-radius': '12px',
+                      '--background': '#343536',
+                      '--border-radius': '4px',
                       '--padding-start': '12px',
-                      '--color': 'black',
+                      '--color': '#d7dadc',
+                      '--placeholder-color': '#818384',
+                      '--border-color': '#4a4a4b',
                       marginBottom: '16px'
                     }}
                     value={lastName}
@@ -296,7 +311,7 @@ const EditAccount: React.FC = () => {
             </IonGrid>
 
             {/* Password Change Section */}
-            <IonText style={{ display: 'block', margin: '16px 0 8px', fontWeight: '600', color: 'black' }}>
+            <IonText style={{ display: 'block', margin: '20px 0 10px', fontWeight: 'bold', color: '#d7dadc', fontSize: '1rem' }}>
               Change Password
             </IonText>
 
@@ -308,18 +323,20 @@ const EditAccount: React.FC = () => {
               counter={true}
               maxlength={30}
               style={{
-                '--background': 'rgba(255, 255, 255, 0.7)',
-                '--border-radius': '12px',
+                '--background': '#343536',
+                '--border-radius': '4px',
                 '--padding-start': '12px',
-                '--color': 'black',
+                '--color': '#d7dadc',
+                '--placeholder-color': '#818384',
+                '--border-color': '#4a4a4b',
                 marginBottom: '16px'
               }}
               value={password}
               onIonChange={(e) => setPassword(e.detail.value!)}
             >
-              <IonInputPasswordToggle slot="end" />
-              <div slot="helper" style={{ color: password.length < 8 ? 'red' : 'green', fontSize: '12px' }}>
-                {password.length < 8 ? 'Password should be at least 8 characters' : 'Good password'}
+              <IonInputPasswordToggle slot="end" style={{'--color': '#818384'}}/>
+              <div slot="helper" style={{ color: password.length < 8 && password.length > 0 ? '#ff4500' : (password.length >= 8 ? '#46d160' : '#818384'), fontSize: '12px' }}>
+                {password.length < 8 && password.length > 0 ? 'Password should be at least 8 characters' : (password.length >= 8 ? 'Strong password' : 'Enter new password')}
               </div>
             </IonInput>
 
@@ -331,23 +348,25 @@ const EditAccount: React.FC = () => {
               counter={true}
               maxlength={30}
               style={{
-                '--background': 'rgba(255, 255, 255, 0.7)',
-                '--border-radius': '12px',
+                '--background': '#343536',
+                '--border-radius': '4px',
                 '--padding-start': '12px',
-                '--color': 'black',
+                '--color': '#d7dadc',
+                '--placeholder-color': '#818384',
+                '--border-color': '#4a4a4b',
                 marginBottom: '16px'
               }}
               value={confirmPassword}
               onIonChange={(e) => setConfirmPassword(e.detail.value!)}
             >
-              <IonInputPasswordToggle slot="end" />
-              <div slot="helper" style={{ color: confirmPassword !== password ? 'red' : 'green', fontSize: '12px' }}>
-                {confirmPassword !== password ? 'Passwords do not match' : 'Passwords match'}
+              <IonInputPasswordToggle slot="end" style={{'--color': '#818384'}}/>
+              <div slot="helper" style={{ color: confirmPassword.length > 0 && confirmPassword !== password ? '#ff4500' : (confirmPassword === password && confirmPassword.length > 0 ? '#46d160' : '#818384'), fontSize: '12px' }}>
+                {confirmPassword.length > 0 && confirmPassword !== password ? 'Passwords do not match' : (confirmPassword === password && confirmPassword.length > 0 ? 'Passwords match' : 'Confirm new password')}
               </div>
             </IonInput>
 
             {/* Current Password Section */}
-            <IonText style={{ display: 'block', margin: '16px 0 8px', fontWeight: '600', color: 'black' }}>
+            <IonText style={{ display: 'block', margin: '20px 0 10px', fontWeight: 'bold', color: '#d7dadc', fontSize: '1rem' }}>
               Confirm Changes
             </IonText>
 
@@ -359,30 +378,36 @@ const EditAccount: React.FC = () => {
               counter={true}
               maxlength={30}
               style={{
-                '--background': 'rgba(255, 255, 255, 0.7)',
-                '--border-radius': '12px',
+                '--background': '#343536',
+                '--border-radius': '4px',
                 '--padding-start': '12px',
-                '--color': 'black',
+                '--color': '#d7dadc',
+                '--placeholder-color': '#818384',
+                '--border-color': '#4a4a4b',
                 marginBottom: '24px'
               }}
               value={currentPassword}
               onIonChange={(e) => setCurrentPassword(e.detail.value!)}
             >
-              <IonInputPasswordToggle slot="end" />
+              <IonInputPasswordToggle slot="end" style={{'--color': '#818384'}}/>
+              <div slot="helper" style={{ color: '#818384', fontSize: '12px' }}>
+                Required to save changes
+              </div>
             </IonInput>
 
             <IonButton
               expand="block"
               onClick={handleUpdate}
               style={{
-                '--background': 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)',
-                '--background-hover': 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)',
-                '--background-activated': 'linear-gradient(135deg, #fad0c4 0%, #ff9a9e 100%)',
-                '--border-radius': '12px',
-                '--box-shadow': '0 2px 10px rgba(100, 100, 100, 0.1)',
+                '--background': '#0079d3',
+                '--background-hover': '#0085e6',
+                '--background-activated': '#006ac2',
+                '--border-radius': '4px',
+                '--box-shadow': 'none',
                 '--color': 'white',
                 fontWeight: '600',
-                height: '48px'
+                height: '48px',
+                fontSize: '1rem'
               }}
             >
               Update Account
@@ -393,15 +418,16 @@ const EditAccount: React.FC = () => {
         <IonAlert
           isOpen={showAlert}
           onDidDismiss={() => setShowAlert(false)}
+          header="Update Status"
           message={alertMessage}
           buttons={["OK"]}
           style={{
-            '--background': 'rgba(255, 240, 240, 0.95)',
-            '--backdrop-filter': 'blur(10px)',
-            '--box-shadow': '0 4px 20px rgba(100, 100, 100, 0.15)',
-            '--border-radius': '16px',
-            '--header-color': 'black',
-            '--message-color': '#333'
+            '--background': '#2b2b2c',
+            '--backdrop-filter': 'blur(5px)',
+            '--box-shadow': '0 4px 20px rgba(0, 0, 0, 0.4)',
+            '--border-radius': '8px',
+            '--header-color': '#d7dadc',
+            '--message-color': '#d7dadc'
           }}
         />
       </IonContent>
