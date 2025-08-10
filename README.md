@@ -60,7 +60,7 @@ Make sure you have your own Supabase project and environment variables set up to
 Special thanks to our instructor:
 
 Sir Cliff Amadeus F. Evangelio
-[🔗 GitHub Profile](https://github.com/cliffamadeus)
+[🔗 GitHub](https://github.com/cliffamadeus)
 
 for his valuable guidance and support throughout the semester.
 
